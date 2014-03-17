@@ -99,28 +99,28 @@ module Board
       else
         case f
          when "West"
-          p "Robot facing west"
+          puts "Robot facing west"
           (0..4).to_a.include?(x) && (0..4).to_a.include?(total)
          when "North" 
-          p "Robot facing north"
+          puts "Robot facing north"
           (4..8).to_a.include?(y) && (4..8).to_a.include?(total)
          when "East"
-          p "Robot facing east"
+          puts "Robot facing east"
           (4..8).to_a.include?(x) && (4..8).to_a.include?(total)
          when "South"
-          p "Robot facing south"
+          puts "Robot facing south"
           (0..4).to_a.include?(y) && (0..4).to_a.include?(total)
         end
       end
     end
 
     def common_message(message = nil)
-      p message
+      puts message
     end
 
     def print_position values
       @place_position.to_a.each_with_index do |p|
-        p "#{p[0]} => #{p[1]}"
+        puts "#{p[0]} => #{p[1]}"
       end
     end
 
@@ -142,24 +142,28 @@ module Board
 
 end
 
-YAML::load_file('instruction.yml').each do |move|
-  p "--: Setting position for bot as per #{move[0]} instructions :--"
-  if move[1].values_at("o")[0] && !move[1].values_at("o")[0].is_a?(Array)
-    orders = move[1].reject{|k| k!="o"}.values[0]
-    position = move[1].reject{ |k| k == "o" }
-    initialize_bot = Board::Play.new(position)
-    toy_position = initialize_bot.get_values
-    initialize_bot.send(orders.to_sym)
-  elsif move[1].values_at("o")[0] && move[1].values_at("o")[0].is_a?(Array)
-    orders = move[1].reject{|k| k!="o"}.values[0]
-    position = move[1].reject{ |k| k == "o" }
-    initialize_bot = Board::Play.new(position)
-    toy_position = initialize_bot.get_values
-    for order in orders
-    initialize_bot.send(order.to_sym)
+begin 
+  YAML::load_file('instruction.yml').each do |move|
+    puts "--: Setting position for bot as per #{move[0]} instructions :--"
+    if move[1].values_at("o")[0] && !move[1].values_at("o")[0].is_a?(Array)
+      orders = move[1].reject{|k| k!="o"}.values[0]
+      position = move[1].reject{ |k| k == "o" }
+      initialize_bot = Board::Play.new(position)
+      toy_position = initialize_bot.get_values
+      initialize_bot.send(orders.to_sym)
+    elsif move[1].values_at("o")[0] && move[1].values_at("o")[0].is_a?(Array)
+      orders = move[1].reject{|k| k!="o"}.values[0]
+      position = move[1].reject{ |k| k == "o" }
+      initialize_bot = Board::Play.new(position)
+      toy_position = initialize_bot.get_values
+      for order in orders
+      initialize_bot.send(order.to_sym)
+      end
+    else
+      toy_position = Board::Play.new(move[1]).get_values
+      Board::Play.new(move[1]).print_position toy_position
     end
-  else
-    toy_position = Board::Play.new(move[1]).get_values
-    Board::Play.new(move[1]).print_position toy_position
   end
+rescue
+  puts "Please provide valid YAML file !"
 end
