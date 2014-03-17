@@ -8,7 +8,7 @@ module Board
     def initialize(options = {})
       @place_position = if options.empty? 
         self.class.default_options 
-      else
+      else        
         options.inject({}){|convert,(k,v)| convert[k.to_sym] = v; convert}
       end
     end
@@ -24,7 +24,12 @@ module Board
     end
 
     def get_values
-      @place_position
+      if %w(East West North South).include?(@place_position.values_at(:f)[0])
+        @place_position
+      else
+        common_message("Face position is not valid !")
+        exit;
+      end
     end
 
     def move
@@ -141,7 +146,7 @@ end
 
 
 YAML::load_file('instruction.yml').each do |move|
-  p "--: Positing bot as per #{move[0]} instructions :--"
+  p "--: Setting position for bot as per #{move[0]} instructions :--"
 
   if move[1].values_at("o")[0] && !move[1].values_at("o")[0].is_a?(Array)
      orders = move[1].reject{|k| k!="o"}.values[0]
@@ -159,7 +164,7 @@ YAML::load_file('instruction.yml').each do |move|
      end
   else
     toy_position = Board::Play.new(move[1]).get_values
-    p Board::Play.new(move[1]).print_position toy_position
+    Board::Play.new(move[1]).print_position toy_position
   end
   
 end
