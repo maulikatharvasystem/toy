@@ -8,7 +8,7 @@ module Board
     def initialize(options = {})
       @place_position = if options.empty? 
         self.class.default_options 
-      else        
+      else
         options.inject({}){|convert,(k,v)| convert[k.to_sym] = v; convert}
       end
     end
@@ -86,16 +86,14 @@ module Board
     end
 
     def validate_movement? options
-
       x = options.values_at(:x)[0]
       y = options.values_at(:y)[0]
       f = options.values_at(:f)[0]
 
       total = x + y
-
       p print_position @place_position
 
-      if total > 8
+      if total > 8 || total < 0
         common_message("Can't place robot out of Board !")
         return true
       else
@@ -127,7 +125,6 @@ module Board
     end
 
     def record_movement(latest_postion, track = nil)
-
       x = latest_postion.values_at(:x)[0]
       y = latest_postion.values_at(:y)[0]
       f = latest_postion.values_at(:f)[0]
@@ -142,29 +139,27 @@ module Board
     end
 
   end
-end
 
+end
 
 YAML::load_file('instruction.yml').each do |move|
   p "--: Setting position for bot as per #{move[0]} instructions :--"
-
   if move[1].values_at("o")[0] && !move[1].values_at("o")[0].is_a?(Array)
-     orders = move[1].reject{|k| k!="o"}.values[0]
-     position = move[1].reject{ |k| k == "o" }
-     initialize_bot = Board::Play.new(position)
-     toy_position = initialize_bot.get_values
-     initialize_bot.send(orders.to_sym)
+    orders = move[1].reject{|k| k!="o"}.values[0]
+    position = move[1].reject{ |k| k == "o" }
+    initialize_bot = Board::Play.new(position)
+    toy_position = initialize_bot.get_values
+    initialize_bot.send(orders.to_sym)
   elsif move[1].values_at("o")[0] && move[1].values_at("o")[0].is_a?(Array)
-     orders = move[1].reject{|k| k!="o"}.values[0]
-     position = move[1].reject{ |k| k == "o" }
-     initialize_bot = Board::Play.new(position)
-     toy_position = initialize_bot.get_values
-     for order in orders
-      initialize_bot.send(order.to_sym)
-     end
+    orders = move[1].reject{|k| k!="o"}.values[0]
+    position = move[1].reject{ |k| k == "o" }
+    initialize_bot = Board::Play.new(position)
+    toy_position = initialize_bot.get_values
+    for order in orders
+    initialize_bot.send(order.to_sym)
+    end
   else
     toy_position = Board::Play.new(move[1]).get_values
     Board::Play.new(move[1]).print_position toy_position
   end
-  
 end
