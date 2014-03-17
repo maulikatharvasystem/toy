@@ -6,3 +6,9 @@ Other files are support files which contains support data and recording movement
 
 instruction.yml => Add movement in this file
 record.yml => Movement will be recorded here, on error it will set to default
+
+Run Program instructions:
+
+Open terminal and go to folder root 
+
+>ruby board.rb
