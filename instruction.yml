@@ -1,30 +1,21 @@
 ## YAML Template.
 ---
 defaults: &defaults
-  ox: 0
-  oy: 0
-  of: "North"
+  x: 0
+  y: 0
+  f: "North"
 
 example_move1:
           <<: *defaults
-          x: 0
-          y: 0
-          f: "North"
           o: 'move'
 
 example_move2:
           <<: *defaults
-          x: 0
-          y: 0
-          f: "North"
           o: 'left'
 
 example_move3:
             x: 1
             y: 2
             f: "East"
-            o: 'move'
-            o: 'move'
-            o: 'left'
-            o: 'move'
+            o: ['move', 'move', 'left', 'move']
 

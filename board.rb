@@ -1,15 +1,30 @@
 
 require 'yaml'
-require_relative 'toy_robot'
 
 module Board
 
   class Play
 
-    include ToyRobot
+    def initialize(options = {})
+      @place_position = if options.empty? 
+        self.class.default_options 
+      else
+        options.inject({}){|convert,(k,v)| convert[k.to_sym] = v; convert}
+      end
+    end
 
-    def initialize
-      @place_position = Place.new().get_values
+    def self.default_options
+      lrt = YAML::load_file('record.yml')
+      track = lrt['position']['track']
+      if track == 0
+        {:x => 0, :y => 0, :f => "North"}
+      else
+        {:x => lrt['position']['x'], :y => lrt['position']['y'], :f => lrt['position']['f']}
+      end
+    end
+
+    def get_values
+      @place_position
     end
 
     def move
@@ -66,6 +81,7 @@ module Board
     end
 
     def validate_movement? options
+
       x = options.values_at(:x)[0]
       y = options.values_at(:y)[0]
       f = options.values_at(:f)[0]
@@ -124,6 +140,26 @@ module Board
 end
 
 
-read_instructions = YAML::load_file('instruction.yml')
+YAML::load_file('instruction.yml').each do |move|
+  p "--: Positing bot as per #{move[0]} instructions :--"
 
-p read_instructions
+  if move[1].values_at("o")[0] && !move[1].values_at("o")[0].is_a?(Array)
+     orders = move[1].reject{|k| k!="o"}.values[0]
+     position = move[1].reject{ |k| k == "o" }
+     initialize_bot = Board::Play.new(position)
+     toy_position = initialize_bot.get_values
+     initialize_bot.send(orders.to_sym)
+  elsif move[1].values_at("o")[0] && move[1].values_at("o")[0].is_a?(Array)
+     orders = move[1].reject{|k| k!="o"}.values[0]
+     position = move[1].reject{ |k| k == "o" }
+     initialize_bot = Board::Play.new(position)
+     toy_position = initialize_bot.get_values
+     for order in orders
+      initialize_bot.send(order.to_sym)
+     end
+  else
+    toy_position = Board::Play.new(move[1]).get_values
+    p Board::Play.new(move[1]).print_position toy_position
+  end
+  
+end
