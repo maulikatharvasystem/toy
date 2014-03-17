@@ -1,0 +1,8 @@
+===== Sample Bot program for a board 5x5 =====
+
+Main initialize program is written in board.rb file.
+
+Other files are support files which contains support data and recording movement.
+
+instruction.yml => Add movement in this file
+record.yml => Movement will be recorded here, on error it will set to default
