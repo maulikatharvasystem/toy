@@ -1,4 +1,3 @@
-
 require "spec_helper"
 require './board'
 
@@ -11,31 +10,30 @@ describe Board::Play do
   end
 
   describe ".move" do
-  	it 'return valid positions for robot' do
-  	 b = {:x=>0, :y=>1, :f=>"North"}
-  	 hash_val = Board::Play.new({:x=>0, :y=>0, :f=>"North"}).move
-  	 val = hash_val.inject({}){|convert,(k,v)| convert[k.to_sym] = v; convert}
-  	 expect(val).to eq b
+    it 'return valid positions for robot' do
+      b = {:x=>0, :y=>1, :f=>"North"}
+      hash_val = Board::Play.new({:x=>0, :y=>0, :f=>"North"}).move
+      val = hash_val.inject({}){|convert,(k,v)| convert[k.to_sym] = v; convert}
+      expect(val).to eq b
     end
   end
 
   describe ".left" do
-  	it 'return valid positions for robot' do
-  	 b = {:x=>0, :y=>1, :f=>"West"}
-  	 hash_val = Board::Play.new({:x=>0, :y=>1, :f=>"North"}).left
-  	 val = hash_val.inject({}){|convert,(k,v)| convert[k.to_sym] = v; convert}
-  	 expect(val).to eq b
+    it 'return valid positions for robot' do
+      b = {:x=>0, :y=>1, :f=>"West"}
+      hash_val = Board::Play.new({:x=>0, :y=>1, :f=>"North"}).left
+      val = hash_val.inject({}){|convert,(k,v)| convert[k.to_sym] = v; convert}
+      expect(val).to eq b
     end
   end
 
   describe ".right" do
-  	it 'return valid positions for robot' do
-  	 b = {:x=>0, :y=>1, :f=>"West"}
-  	 hash_val = Board::Play.new({:x=>0, :y=>1, :f=>"South"}).right
-  	 val = hash_val.inject({}){|convert,(k,v)| convert[k.to_sym] = v; convert}
-  	 expect(val).to eq b
+    it 'return valid positions for robot' do
+      b = {:x=>0, :y=>1, :f=>"West"}
+      hash_val = Board::Play.new({:x=>0, :y=>1, :f=>"South"}).right
+      val = hash_val.inject({}){|convert,(k,v)| convert[k.to_sym] = v; convert}
+      expect(val).to eq b
     end
   end
-
 
 end
