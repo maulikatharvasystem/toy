@@ -1,10 +1,8 @@
-
 require 'yaml'
 
 module Board
 
   class Play
-
     def initialize(options = {})
       @place_position = if options.empty? 
         self.class.default_options 
