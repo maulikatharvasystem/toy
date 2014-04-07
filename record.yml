@@ -2,5 +2,5 @@
 position:
   x: 0
   y: 1
-  f: West
-  track: 143
+  f: East
+  track: 0
